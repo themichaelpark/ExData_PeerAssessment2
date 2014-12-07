@@ -1,0 +1,6 @@
+download.file("http://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip", "fnei.zip")
+unzip("fnei.zip")
+NEI <- readRDS("summarySCC_PM25.rds")
+png("plot1.png")
+barplot(tapply(NEI$Emissions, NEI$year, sum))
+dev.off()

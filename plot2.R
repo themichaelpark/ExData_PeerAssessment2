@@ -1,0 +1,7 @@
+download.file("http://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip", "fnei.zip")
+unzip("fnei.zip")
+NEI <- readRDS("summarySCC_PM25.rds")
+d <- subset(NEI, fips == "24510" & (year == 1999 | year == 2008), select = Emissions:year)
+png("plot2.png")
+barplot(tapply(d$Emissions, d$year, sum))
+dev.off()

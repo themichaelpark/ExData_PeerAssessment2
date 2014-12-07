@@ -63,21 +63,30 @@ The overall goal of this assignment is to explore the National Emissions Invento
 You must address the following questions and tasks in your exploratory analysis. For each question/task you will need to make a single plot. Unless specified, you can use any plotting system in R to make your plot.
 
 ##Have total emissions from PM2.5 decreased in the United States from 1999 to 2008? Using the base plotting system, make a plot showing the total PM2.5 emission from all sources for each of the years 1999, 2002, 2005, and 2008.
-```{r}
-library(dplyr)
-par(mfrow=c(2,2))
-years <- c(1999, 2002, 2005, 2008)
-type <- unique(NEI$type)
-
-barplot
+```{r figure1}
+download.file("http://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip", "fnei.zip")
+unzip("fnei.zip")
+NEI <- readRDS("summarySCC_PM25.rds")
+barplot(tapply(NEI$Emissions, NEI$year, sum))
 ```
 
 ##Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (fips == "24510") from 1999 to 2008? Use the base plotting system to make a plot answering this question.
-```{r}
-
+```{r figure2}
+download.file("http://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip", "fnei.zip")
+unzip("fnei.zip")
+NEI <- readRDS("summarySCC_PM25.rds")
+d <- subset(NEI, fips == "24510" & (year == 1999 | year == 2008), select = Emissions:year)
+barplot(tapply(d$Emissions, d$year, sum))
 ```
 ##Of the four types of sources indicated by the type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999–2008 for Baltimore City? Which have seen increases in emissions from 1999–2008? Use the ggplot2 plotting system to make a plot answer this question.
-
+```{r figure3}
+library(ggplot2)
+download.file("http://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip", "fnei.zip")
+unzip("fnei.zip")
+NEI <- readRDS("summarySCC_PM25.rds")
+d <- subset(NEI, fips == "24510" & (year == 1999 | year == 2008), select = Emissions:year)
+qplot(x=year, y=Emissions, data = d, stat = "summary", fun.y = "sum", facets = .~type, geom = "line")
+```
 ##Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
 
 ##How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
